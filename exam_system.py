@@ -13,6 +13,10 @@ class ExamSystem:
         # 准考证文件夹名称
         self.admission_folder = "准考证"
         # 验证数据文件路径是否合法
+
+        # 初始化列表
+        self.shuffled_students = []
+
         try:
             # 检查路径是否为字符串类型
             if not isinstance(data_file, str):
