@@ -1,6 +1,7 @@
 # 定义考试系统
 import os
 import time
+import random
 from student import Student  # 导入之前定义的学生类
 class ExamSystem:
     def __init__(self, data_file="人工智能编程语言学生名单.txt"):
@@ -117,7 +118,46 @@ class ExamSystem:
             print(f"\n[提示] 未找到学号为 '{stu_id}' 的学生信息，请检查输入是否正确。\n")
 
     def random_pick(self, count):
-        pass
+        # 随机抽取指定数量的学生且不重复
+
+        # 异常
+        try:
+            total = len(self.students)
+            # 数量不能超过总人数
+            if count > total:
+                raise ValueError(f"抽取数量 ({count}) 不能超过总人数 ({total})")
+            # 数量必须大于 0
+            if count <= 0:
+                raise ValueError("抽取数量必须大于 0")
+
+            # 不重复抽取
+            selected_students = random.sample(self.students, count)
+            return selected_students
+
+        except ValueError as e:
+            # 逻辑校验错误
+            print(f"[错误] 点名参数无效：{e}")
+            return []
+        except Exception as e:
+            # 其他未知异常
+            print(f"[错误] 点名过程发生未知异常：{e}")
+            return []
+
+    def run_roll_call(self, count):
+        # 点名并打印结果
+
+        # 获取名单
+        result_list = self.random_pick(count)
+
+        # 如果结果为空直接返回
+        if not result_list:
+            return
+
+        print(f"\n=== 随机点名结果 ({count} 人) ===")
+        # 遍历结果列表并打印
+        for idx, student in enumerate(result_list, 1):
+            print(f"{idx}. {student.name} ({student.stu_id})")
+        print("================================\n")
 
     def generate_exam_table(self):
         pass

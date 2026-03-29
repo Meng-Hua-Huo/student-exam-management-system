@@ -15,18 +15,37 @@ def main():
     # 用户输入
     print("\n=== 学生信息查询系统 ===")
     while True:
+        print("1. 查询学生信息")
+        print("2. 随机点名")
+        print("3. 退出程序")
+
         # 异常
         try:
-            # 获取用户输入
-            user_input = input("请输入学号查询 (输入 q 退出): ").strip()
+            choice = input("请选择功能 (1/2/3): ").strip()
 
-            # 判断是否退出
-            if user_input.lower() == 'q':
+            if choice == '1':
+                # 查询
+                stu_id = input("请输入学号：").strip()
+                system.search_and_print(stu_id)
+
+            elif choice == '2':
+                # 随机点名
+                # 异常
+                try:
+                    input_str = input("请输入需要点名的学生数量：").strip()
+                    count = int(input_str)  # 尝试转换为整数
+                    system.run_roll_call(count)
+                except ValueError:
+                    # 转换失败
+                    print("[错误] 输入无效：请输入数字字符。\n")
+                except KeyboardInterrupt:
+                    print("\n[系统] 操作取消。\n")
+
+            elif choice == '3':
                 print("[系统] 退出程序。")
                 break
-
-            # 调用系统方法查找并打印
-            system.search_and_print(user_input)
+            else:
+                print("[提示] 无效的选择，请输入 1、2 或 3。\n")
 
         except KeyboardInterrupt:
             # Ctrl+C 强制退出
