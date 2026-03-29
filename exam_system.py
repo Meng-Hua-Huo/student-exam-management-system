@@ -208,4 +208,48 @@ class ExamSystem:
             print(f"[错误] 生成安排表时发生未知异常：{e}")
 
     def generate_admission_tickets(self):
-        pass
+        # 生成准考证文件夹及独立文件
+
+        try:
+            # 确保学生数据已加载
+            if not self.students:
+                raise ValueError("当前没有学生数据，无法生成准考证")
+
+            # 创建 '准考证' 文件夹
+            os.makedirs(self.admission_folder, exist_ok=True)
+            print(f"[系统] 已确认文件夹 '{self.admission_folder}' 存在")
+
+            # 确保有座位安排数据
+            if not self.shuffled_students:
+                self.shuffled_students = self.students[:]
+                random.shuffle(self.shuffled_students)
+                print("[提示] 未检测到考场安排，已为本轮准考证生成临时座位安排")
+
+            # 循环生成独立文件
+            for index, student in enumerate(self.shuffled_students, 1):
+                # 生成文件名
+                file_name = f"{str(index).zfill(2)}.txt"
+                file_path = os.path.join(self.admission_folder, file_name)
+
+                # 写入文件内容
+                try:
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        f.write(f"座位号：{index}\n")
+                        f.write(f"姓名：{student.name}\n")
+                        f.write(f"学号：{student.stu_id}\n")
+                except PermissionError:
+                    print(f"[错误] 无权限写入文件 {file_name}")
+                    continue
+                except Exception as e:
+                    print(f"[错误] 写入文件 {file_name} 失败：{e}")
+                    continue
+
+            print(f"[成功] 已生成 {len(self.shuffled_students)} 份准考证文件")
+            print(f"[路径] {os.path.abspath(self.admission_folder)}")
+
+        except ValueError as e:
+            print(f"[错误] 生成准考证失败：{e}")
+        except OSError as e:
+            print(f"[错误] 文件夹创建失败：{e}，请检查磁盘权限")
+        except Exception as e:
+            print(f"[错误] 生成准考证时发生未知异常：{e}")
