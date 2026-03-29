@@ -65,8 +65,11 @@ class ExamSystem:
                     # 跳过空行
                     if not line:
                         continue
+                    # 跳过包含表头关键词的行，防止误读
+                    if "姓名" in line or "学号" in line or "序号" in line:
+                        continue
 
-                    # 此处假设文件格式为空格分隔
+                        # 此处假设文件格式为空格分隔
                     parts = line.split()
 
                     # 确保数据列数足够
