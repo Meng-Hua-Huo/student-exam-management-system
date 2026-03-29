@@ -64,8 +64,8 @@ class ExamSystem:
                     if not line:
                         continue
 
-                    # 此处假设文件格式为逗号分隔
-                    parts = line.split(',')
+                    # 此处假设文件格式为空格分隔
+                    parts = line.split()
 
                     # 确保数据列数足够
                     if len(parts) >= 5:
