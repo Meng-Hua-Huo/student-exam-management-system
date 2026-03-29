@@ -17,11 +17,12 @@ def main():
     while True:
         print("1. 查询学生信息")
         print("2. 随机点名")
-        print("3. 退出程序")
+        print("3. 生成考场安排表")
+        print("4. 退出程序")
 
         # 异常
         try:
-            choice = input("请选择功能 (1/2/3): ").strip()
+            choice = input("请选择功能 (1-4): ").strip()
 
             if choice == '1':
                 # 查询
@@ -42,10 +43,14 @@ def main():
                     print("\n[系统] 操作取消。\n")
 
             elif choice == '3':
+                # 调用生成考场安排表功能
+                system.generate_exam_table()
+
+            elif choice == '4':
                 print("[系统] 退出程序。")
                 break
             else:
-                print("[提示] 无效的选择，请输入 1、2 或 3。\n")
+                print("[提示] 无效的选择，请输入 1-4。\n")
 
         except KeyboardInterrupt:
             # Ctrl+C 强制退出

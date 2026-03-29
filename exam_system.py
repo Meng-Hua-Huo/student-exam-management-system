@@ -2,6 +2,7 @@
 import os
 import time
 import random
+from datetime import datetime
 from student import Student  # 导入之前定义的学生类
 class ExamSystem:
     def __init__(self, data_file="人工智能编程语言学生名单.txt"):
@@ -160,7 +161,48 @@ class ExamSystem:
         print("================================\n")
 
     def generate_exam_table(self):
-        pass
+        # 生成考场安排表文件
+
+        output_file = "考场安排表.txt"
+
+        # 异常
+        try:
+            # 确保学生数据已加载
+            if not self.students:
+                raise ValueError("当前没有学生数据，无法生成安排表")
+
+            # 将全班学生顺序随机打乱
+            shuffled_students = self.students[:]
+            random.shuffle(shuffled_students)
+
+            # 获取当前生成时间
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+            # 写入文件
+            with open(output_file, 'w', encoding='utf-8') as f:
+                # 生成时间
+                f.write(f"生成时间：{current_time}\n")
+
+                # 写入表头
+                f.write(f"{'座位号':<10}{'姓名':<10}{'学号':<15}\n")
+
+                # 遍历打乱后的学生列表，写入座位信息
+                for index, student in enumerate(shuffled_students, 1):
+                    line = f"{index:<10}{student.name:<10}{student.stu_id:<15}\n"
+                    f.write(line)
+
+            # 生成成功后提示
+            print(f"[成功] 考场安排表已生成：{os.path.abspath(output_file)}")
+
+        except ValueError as e:
+            # 逻辑错误
+            print(f"[错误] 生成安排表失败：{e}")
+        except PermissionError as e:
+            # 权限错误
+            print(f"[错误] 无权限写入文件：{e}，请检查文件是否被打开")
+        except Exception as e:
+            # 其他未知异常
+            print(f"[错误] 生成安排表时发生未知异常：{e}")
 
     def generate_admission_tickets(self):
         pass
